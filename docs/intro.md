@@ -21,11 +21,6 @@ cd myApp
 yarn dev
 ```
 
-### What you'll need
-
-- [Node.js](https://nodejs.org/en/download/) version 16.14 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
-
 ## Installation
 
 ```bash
@@ -43,4 +38,56 @@ yarn dev
 
 ```bash
 yarn storybook
+```
+
+### Production
+
+#### NodeJS (recommended)
+
+```bash
+yarn install
+yarn storybook:build # Optional: Will expose the Storybook at `/storybook`
+yarn build
+yarn start
+```
+
+#### Docker
+
+1. Build the Docker image (replace `start-ui-web` with your project name)
+
+```
+docker build -t start-ui-web .
+```
+
+2. Run the Docker image (replace `start-ui-web` with your project name)
+
+```
+docker run -p 80:3000 start-ui-web
+```
+
+Application will be exposed on port 80 ([http://localhost](http://localhost))
+
+#### Static files
+
+```bash
+yarn storybook:build # Optional: Will expose the Storybook at `/storybook/index.html`
+yarn static:build
+```
+
+Then expose the `/out` folder.
+
+💡 You will need to setup your server to rewrite all `/app/*` urls to serve the `app.html` file.
+
+##### Using Apache as your web server
+
+If you are using [apache](https://httpd.apache.org/) to statically deploy your app, you can use the following configuration for `public/.htaccess` :
+
+```bash
+# public/.htaccess
+Options -MultiViews
+RewriteEngine On
+
+# Rewrite /app/* to app.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule "^app/" "app.html" [QSA,L]
 ```
